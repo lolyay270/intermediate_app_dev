@@ -1,4 +1,4 @@
-export interface CardProps {
+export interface MovieProps {
     id: number;
     name: string;
     date: string;
@@ -6,15 +6,15 @@ export interface CardProps {
     overview: string;
 };
 
-const Card: React.FC<CardProps> = (props: CardProps) => {
+const Movie: React.FC<MovieProps> = (props: MovieProps) => {
     return (
         <>
             <p>{props.name}</p>
             <p>{props.date}</p>
-            <img src={props.posterPath}/>
+            <img src={props.posterPath} />
             <p>{props.overview}</p>
         </>
     )
 }
 
-export default Card;
+export default Movie;

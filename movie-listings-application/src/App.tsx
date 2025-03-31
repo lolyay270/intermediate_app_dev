@@ -1,11 +1,11 @@
 import './App.css'
 import { useQuery } from '@tanstack/react-query';
-import Card, { CardProps } from './Components/card';
+import Movie, { MovieProps } from './Components/card';
 
 
 function App() {
   const childRoute = "/trending/all/week"; //currently hardcoded, will change later
-  const movieStartURL = 'https://image.tmdb.org/t/p/original'
+  const posterStartURL = 'https://image.tmdb.org/t/p/original'
 
   const {
     isLoading,
@@ -18,9 +18,9 @@ function App() {
   });
 
   //create new array of data that only holds 10 items, and that only has the info needed
-  let movieData: CardProps[] = [];
+  let movieData: MovieProps[] = [];
   for (let i = 0; i < 10; i++) {
-    let movie: CardProps = {
+    let movie: MovieProps = {
       id: fetchData.results[i].id,
       name: fetchData.results[i].name ? fetchData.results[i].name : fetchData.results[i].title, // movies and tv shows have dif var names
       date: fetchData.results[i].release_date ? fetchData.results[i].release_date : fetchData.results[i].first_air_date,
@@ -35,14 +35,14 @@ function App() {
 
   return (
     <>
-      {movieData.map((movie: CardProps) => (
-        <Card 
-          key={movie.id} 
-          id={movie.id} 
+      {movieData.map((movie: MovieProps) => (
+        <Movie
+          key={movie.id}
+          id={movie.id}
           name={movie.name}
           date={movie.date}
-          posterPath={movieStartURL + movie.posterPath}
-          overview={movie.overview}/>
+          posterPath={posterStartURL + movie.posterPath}
+          overview={movie.overview} />
       ))}
     </>
   )
