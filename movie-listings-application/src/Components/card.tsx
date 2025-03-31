@@ -1,3 +1,12 @@
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
+
 export interface MovieProps {
     id: number;
     name: string;
@@ -9,10 +18,22 @@ export interface MovieProps {
 const Movie: React.FC<MovieProps> = (props: MovieProps) => {
     return (
         <>
-            <p>{props.name}</p>
-            <p>{props.date}</p>
-            <img src={props.posterPath} />
-            <p>{props.overview}</p>
+            <Card>
+                <CardHeader>
+                    <CardTitle>
+                        <p>{props.name}</p>
+                    </CardTitle>
+                    <CardDescription>
+                        <p>{props.date}</p>
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <img src={props.posterPath} />
+                </CardContent>
+                <CardFooter>
+                    <p>{props.overview}</p>
+                </CardFooter>
+            </Card>
         </>
     )
 }
