@@ -1,4 +1,5 @@
-interface CardProps {
+export interface CardProps {
+    id: number;
     name: string;
     date: string;
     posterPath: string;
