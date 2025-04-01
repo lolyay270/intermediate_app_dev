@@ -5,22 +5,25 @@ import Nav, { NavProps } from './Components/nav';
 
 
 function App() {
-  const childRoute = "/trending/all/week"; //currently hardcoded, will change later
+  const fetchBaseUrl = 'https://api.themoviedb.org/3'
+  const childRoute = "/trending/all/week?"; //currently hardcoded, will change later
   const posterStartURL = 'https://image.tmdb.org/t/p/original'
 
   const {
-    isLoading,
-    error,
     data: fetchData,
   } = useQuery({
-    queryKey: ["movieData"],
+    queryKey: ["fetchData"],
     queryFn: () =>
-      fetch(`https://api.themoviedb.org/3${childRoute}?api_key=${import.meta.env.VITE_API_KEY}&language=en-US`).then((res) => res.json()),
+      fetch(`${fetchBaseUrl}${childRoute}language=en-US&api_key=${import.meta.env.VITE_API_KEY}`).then((res) => res.json()),
   });
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>{error.message}</p>;
-
+  if (!fetchData) return <p>Loading...</p>;
+  if (fetchData.success === false) return (
+    <>
+      <h2>Error:</h2>
+      <p>{fetchData.status_message}</p>
+    </>
+  );
 
   // The endpoints for the movie types are as follows:
   // Trending -   https://api.themoviedb.org/3/trending/all/week?api_key=<API KEY>&language=en-US
