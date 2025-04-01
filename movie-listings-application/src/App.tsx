@@ -1,7 +1,7 @@
 import './App.css'
 import { useQuery } from '@tanstack/react-query';
 import Movie from './Components/movie';
-import Nav, { NavProps } from './Components/nav';
+import Nav, { NavItems } from './Components/nav';
 
 
 function App() {
@@ -25,20 +25,33 @@ function App() {
     </>
   );
 
-  // The endpoints for the movie types are as follows:
-  // Trending -   https://api.themoviedb.org/3/trending/all/week?api_key=<API KEY>&language=en-US
-  // Top Rated -  https://api.themoviedb.org/3/movie/top_rated?api_key=<API KEY>&language=en-US
-  // Action -     https://api.themoviedb.org/3/discover/movie?api_key=<API KEY>&with_genres=28
-  // Animation -  https://api.themoviedb.org/3/discover/movie?api_key=<API KEY>&with_genres=16
-  // Comedy -     https://api.themoviedb.org/3/discover/movie?api_key=<API KEY>&with_genres=35
-  const navItems = [
+
+
+  const navItems: NavItems[] = [
     {
-      name: "hi",
-      url: "/hi"
+      name: "Trending",
+      localUrl: "trending",
+      fetchUrl: "/trending/all/week?"
     },
     {
-      name: "h2",
-      url: "/h2"
+      name: "Top Rated",
+      localUrl: "top_rated",
+      fetchUrl: "/movie/top_rated?"
+    },
+    {
+      name: "Action",
+      localUrl: "action",
+      fetchUrl: "/discover/movie?with_genres=28&"
+    },
+    {
+      name: "Animation",
+      localUrl: "animation",
+      fetchUrl: "/discover/movie?with_genres=16&"
+    },
+    {
+      name: "Comedy",
+      localUrl: "comedy",
+      fetchUrl: "/discover/movie?with_genres=35&"
     },
   ]
 

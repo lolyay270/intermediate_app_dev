@@ -1,17 +1,24 @@
-export interface NavProps {
+interface NavProps {
   navItems: NavItems[]
 };
 
-interface NavItems {
+export interface NavItems {
   name: string;
-  url: string;
+  localUrl: string;
+  fetchUrl: string;
 }
 
 const Nav: React.FC<NavProps> = (props: NavProps) => {
+  const changeFetchUrl = () => {
+    	// remove current info
+      // fetch new info
+  }
+
   return (
     props.navItems.map((item: NavItems) => (
-      <a href={
-        item.url}>{item.name}</a>
+      <a href={item.localUrl} > 
+        <button onClick={changeFetchUrl}>{item.name}</button>
+      </a>
     ))
   );
 };
