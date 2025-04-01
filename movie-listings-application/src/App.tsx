@@ -1,6 +1,6 @@
 import './App.css'
 import { useQuery } from '@tanstack/react-query';
-import Movie, { MovieProps } from './Components/card';
+import Movie from './Components/card';
 
 
 function App() {
@@ -17,31 +17,18 @@ function App() {
       fetch(`https://api.themoviedb.org/3${childRoute}?api_key=${import.meta.env.VITE_API_KEY}&language=en-US`).then((res) => res.json()),
   });
 
-  //create new array of data that only holds 10 items, and that only has the info needed
-  let movieData: MovieProps[] = [];
-  for (let i = 0; i < 10; i++) {
-    let movie: MovieProps = {
-      id: fetchData.results[i].id,
-      name: fetchData.results[i].name ? fetchData.results[i].name : fetchData.results[i].title, // movies and tv shows have dif var names
-      date: fetchData.results[i].release_date ? fetchData.results[i].release_date : fetchData.results[i].first_air_date,
-      posterPath: fetchData.results[i].poster_path,
-      overview: fetchData.results[i].overview,
-    };
-    movieData.push(movie);
-  };
-
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>{error.message}</p>;
 
   return (
     <>
-      {movieData.map((movie: MovieProps) => (
+      {fetchData.results.slice(0, 10).map((movie: any) => (
         <Movie
           key={movie.id}
           id={movie.id}
-          name={movie.name}
-          date={movie.date}
-          posterPath={posterStartURL + movie.posterPath}
+          name={movie.name ? movie.name : movie.title}
+          date={movie.release_date ? movie.release_date : movie.first_air_date}
+          posterPath={posterStartURL + movie.poster_path}
           overview={movie.overview} />
       ))}
     </>
