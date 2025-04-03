@@ -1,3 +1,5 @@
+import { NavLink } from "react-router";
+
 interface NavProps {
   navItems: NavItems[]
 };
@@ -9,17 +11,16 @@ export interface NavItems {
 }
 
 const Nav: React.FC<NavProps> = (props: NavProps) => {
-  const changeFetchUrl = () => {
-    	// remove current info
-      // fetch new info
-  }
-
   return (
-    props.navItems.map((item: NavItems) => (
-      <a href={item.localUrl} > 
-        <button onClick={changeFetchUrl}>{item.name}</button>
-      </a>
-    ))
+    <nav>
+      <ul>
+        {props.navItems.map((item: NavItems) => (
+          <li>
+            <NavLink to={item.localUrl}>{item.name}</NavLink>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 };
 
