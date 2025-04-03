@@ -4,7 +4,7 @@ import './index.css'
 import App from './App.tsx'
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router";
-import Trending from './Components/trending.tsx';
+import Trending from './Components/Trending.tsx';
 import NotFound from './Components/NotFound.tsx';
 
 export const queryClient = new QueryClient();

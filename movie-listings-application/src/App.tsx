@@ -1,7 +1,7 @@
 import './App.css'
 import { useQuery } from '@tanstack/react-query';
-import Movie from './Components/movie';
-import Nav, { NavItems } from './Components/nav';
+import Movie from './Components/Movie';
+import Nav, { NavItems } from './Components/Nav';
 
 
 function App() {
