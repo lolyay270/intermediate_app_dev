@@ -30,7 +30,7 @@ function App() {
   const navItems: NavItems[] = [
     {
       name: "Trending",
-      localUrl: "trending",
+      localUrl: "/",
       fetchUrl: "/trending/all/week?"
     },
     {
