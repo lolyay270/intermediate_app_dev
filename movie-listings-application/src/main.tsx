@@ -5,6 +5,7 @@ import App from './App.tsx'
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router";
 import Trending from './Components/trending.tsx';
+import NotFound from './Components/NotFound.tsx';
 
 export const queryClient = new QueryClient();
 
@@ -13,6 +14,8 @@ createRoot(document.getElementById('root')!).render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
+          <Route path="*" element={<NotFound />} /> {/*must be above other routes*/}
+
           <Route path="/" element={<App />}>
             <Route index element={<Trending />} />
           </Route>
