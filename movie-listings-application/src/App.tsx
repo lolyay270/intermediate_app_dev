@@ -2,7 +2,7 @@ import './App.css'
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { queryClient } from "./main";
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router';
+import { Navigate, useLocation } from 'react-router';
 
 import Movie from './Components/Movie';
 import Nav, { NavItems } from './Components/Nav';
@@ -11,38 +11,41 @@ import Nav, { NavItems } from './Components/Nav';
 export const navItems: NavItems[] = [
   {
     name: "Trending",
-    localUrl: "trending",
+    localUrl: "/trending",
     fetchUrl: "/trending/all/week?"
   },
   {
     name: "Top Rated",
-    localUrl: "top_rated",
+    localUrl: "/top_rated",
     fetchUrl: "/movie/top_rated?"
   },
   {
     name: "Action",
-    localUrl: "action",
+    localUrl: "/action",
     fetchUrl: "/discover/movie?with_genres=28&"
   },
   {
     name: "Animation",
-    localUrl: "animation",
+    localUrl: "/animation",
     fetchUrl: "/discover/movie?with_genres=16&"
   },
   {
     name: "Comedy",
-    localUrl: "comedy",
+    localUrl: "/comedy",
     fetchUrl: "/discover/movie?with_genres=35&"
   },
 ]
 
 function App() {
   let currentRoute = useLocation();
-  console.log("currentRoute", currentRoute)
+
+  //default route is trending
+  if (currentRoute.pathname === '/') {
+    return <Navigate to="/trending" replace />
+  }
 
   const fetchBaseUrl = 'https://api.themoviedb.org/3'
-  const [fetchRoute, setFetchRoute] = useState(navItems[0].fetchUrl)
-  const fullFetchUrl = `${fetchBaseUrl}${fetchRoute}language=en-US&api_key=${import.meta.env.VITE_API_KEY}`;
+  const [fullFetchUrl, setFullFetchUrl] = useState(``);
   const posterStartURL = 'https://image.tmdb.org/t/p/original'
 
   let {
@@ -62,7 +65,6 @@ function App() {
         },
       }).then((res) => {
         if (res.status === 200) {
-          fetchData = null;
           fetchData = getMoviesData;
         }
         return res.json()
@@ -76,10 +78,10 @@ function App() {
   //whenever the path changes, refetch the data
   useEffect(() => {
     navItems.forEach(nav => {
-      if (nav.localUrl == currentRoute.pathname) setFetchRoute(nav.fetchUrl)
+      if (nav.localUrl == currentRoute.pathname)
+        setFullFetchUrl(`${fetchBaseUrl}${nav.fetchUrl}language=en-US&api_key=${import.meta.env.VITE_API_KEY}`);
     });
     getMoviesMutation();
-    console.log("new fetch movie data", fetchData);
   }, [currentRoute])
 
 
@@ -95,6 +97,8 @@ function App() {
       }
     </>
   );
+
+  
 
   return (
     <>
