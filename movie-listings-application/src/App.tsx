@@ -1,4 +1,3 @@
-import './App.css'
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { queryClient } from "./main";
 import { useEffect, useState } from 'react';
