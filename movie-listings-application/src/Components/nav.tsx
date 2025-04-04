@@ -1,4 +1,10 @@
 import { NavLink } from "react-router";
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuList,
+} from "@/components/ui/navigation-menu"
+
 
 interface NavProps {
   navItems: NavItems[]
@@ -12,15 +18,15 @@ export interface NavItems {
 
 const Nav: React.FC<NavProps> = (props: NavProps) => {
   return (
-    <nav>
-      <ul>
+    <NavigationMenu className="inline w-screen m-1 place-self-center">
+      <NavigationMenuList>
         {props.navItems.map((item: NavItems) => (
-          <li>
-            <NavLink to={item.localUrl}>{item.name}</NavLink>
-          </li>
+          <NavigationMenuItem>
+            <NavLink className='inline-flex rounded-md bg-slate-50 px-4 py-2 text-2xl' to={item.localUrl}>{item.name}</NavLink>
+          </NavigationMenuItem>
         ))}
-      </ul>
-    </nav>
+      </NavigationMenuList>
+    </NavigationMenu>
   );
 };
 

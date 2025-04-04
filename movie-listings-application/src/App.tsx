@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router';
 
 import Movie from './Components/Movie';
-import Nav, { NavItems } from './Components/Nav';
+import { NavItems } from './Components/Nav';
 
 
 export const navItems: NavItems[] = [
@@ -100,18 +100,19 @@ function App() {
   
 
   return (
-    <>
-      <Nav navItems={navItems} />
-      {fetchData.results.slice(0, 10).map((movie: any) => (
-        <Movie
-          key={movie.id}
-          id={movie.id}
-          name={movie.name ? movie.name : movie.title}
-          date={movie.release_date ? movie.release_date : movie.first_air_date}
-          posterPath={posterStartURL + movie.poster_path}
-          overview={movie.overview} />
-      ))}
-    </>
+    <div className="bg-slate-600">
+      <div className='box-content grid grid-cols-5 gap-4 p-4'>
+        {fetchData.results.slice(0, 10).map((movie: any) => (
+          <Movie
+            key={movie.id}
+            id={movie.id}
+            name={movie.name ? movie.name : movie.title}
+            date={movie.release_date ? movie.release_date : movie.first_air_date}
+            posterPath={posterStartURL + movie.poster_path}
+            overview={movie.overview} />
+        ))}
+      </div>
+    </div>
   )
 }
 
