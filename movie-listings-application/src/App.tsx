@@ -3,8 +3,8 @@ import { queryClient } from "./main";
 import { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router';
 
-import Movie from './Components/Movie';
-import { NavItems } from './Components/Nav';
+import Movie from './Components/Movie.tsx';
+import { NavItems } from './Components/Nav.tsx';
 
 
 export const navItems: NavItems[] = [

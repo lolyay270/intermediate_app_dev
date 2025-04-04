@@ -3,7 +3,7 @@ import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuList,
-} from "@/components/ui/navigation-menu"
+} from "./ui/navigation-menu.tsx"
 
 
 interface NavProps {
