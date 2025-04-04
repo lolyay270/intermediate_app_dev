@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 import Trending from './Components/Trending.tsx';
 import NotFound from './Components/NotFound.tsx';
 
@@ -17,7 +17,10 @@ createRoot(document.getElementById('root')!).render(
           <Route path="*" element={<NotFound />} /> {/*must be above other routes*/}
 
           <Route path="/" element={<App />}>
-            <Route index element={<Trending />} />
+          <Route index element={<Navigate to="trending" />} />
+            <Route path="trending" element={<Trending />} />
+            <Route path="top_rated" />
+            <Route path="action"/>
           </Route>
         </Routes>
       </BrowserRouter>
