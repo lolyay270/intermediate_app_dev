@@ -6,7 +6,7 @@ import './index.css'
 
 import App from './App.tsx'
 import NotFound from './Components/NotFound.tsx';
-import Nav from './Components/Nav.tsx';
+import Nav from './Components/nav.tsx';
 import { navItems } from './App.tsx';
 
 export const queryClient = new QueryClient();
