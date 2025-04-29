@@ -2,6 +2,45 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from 'react';
 import { queryClient } from "./main";
 
+
+export const navItems = [
+  {
+    name: "Ask Stories",
+    localUrl: "/ask",
+    fetchUrl: "/askstories.json"
+  },
+  {
+    name: "Best Stories",
+    localUrl: "/best",
+    fetchUrl: "/beststories.json"
+  },
+  {
+    name: "Job Stories",
+    localUrl: "/job",
+    fetchUrl: "/jobstories.json"
+  },
+  {
+    name: "New Stories",
+    localUrl: "/new",
+    fetchUrl: "/newstories.json"
+  },
+  {
+    name: "Show Stories",
+    localUrl: "/show",
+    fetchUrl: "/showstories.json"
+  },
+  {
+    name: "Top Stories",
+    localUrl: "/top",
+    fetchUrl: "/topstories.json"
+  },
+  {
+    name: "Leaders",
+    localUrl: "/leaders",
+    fetchUrl: "<link to my data on top leaders>"
+  },
+]
+
 const App = () => {
   const fetchUrlBase = "https://hacker-news.firebaseio.com/v0/";
   const [fetchUrl, setFetchUrl] = useState("");
