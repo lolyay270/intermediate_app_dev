@@ -2,45 +2,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { queryClient } from "./main";
-import Nav from "./Components/Nav";
-
-export const navItems = [
-  {
-    name: "Ask Stories",
-    localUrl: "/ask",
-    fetchUrl: "/askstories.json",
-  },
-  {
-    name: "Best Stories",
-    localUrl: "/best",
-    fetchUrl: "/beststories.json",
-  },
-  {
-    name: "Job Stories",
-    localUrl: "/job",
-    fetchUrl: "/jobstories.json",
-  },
-  {
-    name: "New Stories",
-    localUrl: "/new",
-    fetchUrl: "/newstories.json",
-  },
-  {
-    name: "Show Stories",
-    localUrl: "/show",
-    fetchUrl: "/showstories.json",
-  },
-  {
-    name: "Top Stories",
-    localUrl: "/top",
-    fetchUrl: "/topstories.json",
-  },
-  {
-    name: "Leaders",
-    localUrl: "/leaders",
-    fetchUrl: "<link to my data on top leaders>",
-  },
-];
+import { navItems } from "./Components/Nav";
 
 const App = () => {
   let currentRoute = useLocation();
@@ -79,7 +41,7 @@ const App = () => {
     getStoryMutation();
   }, [currentRoute]);
 
-  console.log(storyData);
+
 
   if (storyData === null) return <p>No data available</p>;
   if (storyData && !Array.isArray(storyData)) return <p>Loading...</p>;
@@ -87,7 +49,6 @@ const App = () => {
 
   return (
     <>
-      <Nav navItems={navItems}/>
       {storyData && storyData.length > 0 && (
         <p>{storyData.toString()}</p>
       )}

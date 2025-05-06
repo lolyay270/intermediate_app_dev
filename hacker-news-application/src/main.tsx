@@ -5,6 +5,7 @@ import { StrictMode } from 'react'
 import './index.css'
 
 import App from './App.tsx'
+import Nav from "./Components/Nav.tsx";
 
 export const queryClient = new QueryClient();
 
@@ -13,7 +14,12 @@ createRoot(document.getElementById('root')!).render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<App />}>
+          <Route path="/" element={
+            <>
+              <Nav />
+              <App />
+            </>
+          }>
             <Route path="/ask" />
             <Route path="/best" />
             <Route path="/job" />
