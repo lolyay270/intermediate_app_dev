@@ -1,73 +1,84 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router";
 import { queryClient } from "./main";
-
 
 export const navItems = [
   {
     name: "Ask Stories",
     localUrl: "/ask",
-    fetchUrl: "/askstories.json"
+    fetchUrl: "/askstories.json",
   },
   {
     name: "Best Stories",
     localUrl: "/best",
-    fetchUrl: "/beststories.json"
+    fetchUrl: "/beststories.json",
   },
   {
     name: "Job Stories",
     localUrl: "/job",
-    fetchUrl: "/jobstories.json"
+    fetchUrl: "/jobstories.json",
   },
   {
     name: "New Stories",
     localUrl: "/new",
-    fetchUrl: "/newstories.json"
+    fetchUrl: "/newstories.json",
   },
   {
     name: "Show Stories",
     localUrl: "/show",
-    fetchUrl: "/showstories.json"
+    fetchUrl: "/showstories.json",
   },
   {
     name: "Top Stories",
     localUrl: "/top",
-    fetchUrl: "/topstories.json"
+    fetchUrl: "/topstories.json",
   },
   {
     name: "Leaders",
     localUrl: "/leaders",
-    fetchUrl: "<link to my data on top leaders>"
+    fetchUrl: "<link to my data on top leaders>",
   },
-]
+];
 
 const App = () => {
-  const fetchUrlBase = "https://hacker-news.firebaseio.com/v0/";
+  let currentRoute = useLocation();
+
+  const fetchUrlBase = "https://hacker-news.firebaseio.com/v0";
   const [fetchUrl, setFetchUrl] = useState("");
 
-  const {
-    data: storyData,
-  } = useQuery({
+  let { data: storyData } = useQuery({
     queryKey: ["storyData"],
-    queryFn: () =>
-      fetch(fetchUrlBase + fetchUrl).then((res) => res.json()),
+    queryFn: () => fetch(fetchUrl).then((res) => res.json()),
   });
 
-  const { mutate: getStoryMutation, data: getStoryData } =
-  useMutation({
+  const { mutate: getStoryMutation, data: getStoryData } = useMutation({
     mutationFn: () =>
       fetch(fetchUrl, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-      }).then((res) => res.json()),
+      }).then((res) => {
+        storyData = getStoryData;
+        res.json();
+      }),
     onSuccess: () =>
       queryClient.invalidateQueries({
         queryKey: ["storyData"],
       }),
   });
 
+  //whenever the path changes, refetch the data
+  useEffect(() => {
+    navItems.forEach((nav) => {
+      if (nav.localUrl == currentRoute.pathname)
+        setFetchUrl(fetchUrlBase + nav.fetchUrl);
+    });
+    getStoryMutation();
+  }, [currentRoute]);
+
+  console.log(storyData);
 
   if (storyData === null) return <p>No data available</p>;
   if (storyData && !Array.isArray(storyData)) return <p>Loading...</p>;
