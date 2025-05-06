@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { queryClient } from "./main";
 import { navItems } from "./Components/Nav";
+import Leaders from "./Components/Leaders";
 
 const App = () => {
   let currentRoute = useLocation();
@@ -34,11 +35,13 @@ const App = () => {
 
   //whenever the path changes, refetch the data
   useEffect(() => {
-    navItems.forEach((nav) => {
-      if (nav.localUrl == currentRoute.pathname)
-        setFetchUrl(fetchUrlBase + nav.fetchUrl);
-    });
-    getStoryMutation();
+    if (currentRoute.pathname !== "/leaders") {
+      navItems.forEach((nav) => {
+        if (nav.localUrl == currentRoute.pathname)
+          setFetchUrl(fetchUrlBase + nav.fetchUrl);
+      });
+      getStoryMutation();
+    }
   }, [currentRoute]);
 
 
@@ -49,6 +52,7 @@ const App = () => {
 
   return (
     <>
+      {currentRoute.pathname === "/leaders" ? <Leaders /> : <></>  }  {/* <Story localPath={currentRoute.pathname}/> */}
       {storyData && storyData.length > 0 && (
         <p>{storyData.toString()}</p>
       )}
