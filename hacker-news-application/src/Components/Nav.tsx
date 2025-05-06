@@ -12,7 +12,7 @@ const Nav: React.FC<NavProps> = (props: NavProps) => {
   return (
     <nav>
       {props.navItems.map((item: NavItems) => (
-        <a href="props.localUrl">{item.name}</a>
+        <a href={item.localUrl}>{item.name}</a>
       ))}
     </nav>
   );

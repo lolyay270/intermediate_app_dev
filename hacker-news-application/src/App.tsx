@@ -2,6 +2,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { queryClient } from "./main";
+import Nav from "./Components/Nav";
 
 export const navItems = [
   {
@@ -86,6 +87,7 @@ const App = () => {
 
   return (
     <>
+      <Nav navItems={navItems}/>
       {storyData && storyData.length > 0 && (
         <p>{storyData.toString()}</p>
       )}
