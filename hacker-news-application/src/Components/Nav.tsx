@@ -46,7 +46,9 @@ const Nav: React.FC = () => {
   return (
     <nav>
       {navItems.map((item: NavItems) => (
-        <a key={item.name} href={item.localUrl}>{item.name}</a>
+        <a key={item.name} href={item.localUrl}>
+          {item.name}
+        </a>
       ))}
     </nav>
   );

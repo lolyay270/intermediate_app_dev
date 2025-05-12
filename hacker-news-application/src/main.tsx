@@ -1,25 +1,28 @@
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router";
-import { createRoot } from 'react-dom/client'
-import { StrictMode } from 'react'
-import './index.css'
+import { createRoot } from "react-dom/client";
+import { StrictMode } from "react";
+import "./index.css";
 
-import App from './App.tsx'
+import App from "./App.tsx";
 import Nav from "./Components/Nav.tsx";
 
 export const queryClient = new QueryClient();
 
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={
-            <>
-              <Nav />
-              <App />
-            </>
-          }>
+          <Route
+            path="/"
+            element={
+              <>
+                <Nav />
+                <App />
+              </>
+            }
+          >
             <Route path="/ask" />
             <Route path="/best" />
             <Route path="/job" />
@@ -32,4 +35,4 @@ createRoot(document.getElementById('root')!).render(
       </BrowserRouter>
     </QueryClientProvider>
   </StrictMode>,
-)
+);

@@ -4,7 +4,7 @@ import { queryClient } from "../main";
 import { navItems } from "./Nav";
 
 interface StoriesProps {
-  localUrl: String,
+  localUrl: String;
 }
 
 const Stories: React.FC<StoriesProps> = (props: StoriesProps) => {
@@ -42,20 +42,13 @@ const Stories: React.FC<StoriesProps> = (props: StoriesProps) => {
     getStoryMutation();
   }, [props.localUrl]);
 
-  
-  console.log("storyData", storyData)
-
   if (storyData === null) return <p>No data available</p>;
   if (storyData && storyData.error) return <p>Error: {storyData.error}</p>;
   if (!storyData) return <p>Loading...</p>;
 
   return (
-    <>
-      {storyData && storyData.length > 0 && (
-        <p>{storyData.toString()}</p>
-      )}
-    </>
-  )
-}
+    <>{storyData && storyData.length > 0 && <p>{storyData.toString()}</p>}</>
+  );
+};
 
 export default Stories;

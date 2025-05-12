@@ -12,11 +12,7 @@ export const leadersList = [
 ];
 
 const Leaders: React.FC = () => {
-  return (
-    <p>
-      {leadersList}
-    </p>
-  )
-}
+  return <p>{leadersList}</p>;
+};
 
 export default Leaders;

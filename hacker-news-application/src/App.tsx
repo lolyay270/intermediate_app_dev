@@ -7,7 +7,11 @@ const App = () => {
 
   return (
     <>
-      {currentRoute.pathname === "/leaders" ? <Leaders /> : <Stories localUrl={currentRoute.pathname} />}
+      {currentRoute.pathname === "/leaders" ? (
+        <Leaders />
+      ) : (
+        <Stories localUrl={currentRoute.pathname} />
+      )}
     </>
   );
 };
