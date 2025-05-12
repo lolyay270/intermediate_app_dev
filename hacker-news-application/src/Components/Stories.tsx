@@ -10,8 +10,9 @@ interface StoriesProps {
 const Stories: React.FC<StoriesProps> = (props: StoriesProps) => {
   const fetchUrlBase = "https://hacker-news.firebaseio.com/v0";
   const [fetchUrl, setFetchUrl] = useState("");
+  const [movieTitles, setMovieTitles] = useState([]);
 
-  let { data: storyData } = useQuery({
+  let { data: storiesCodes } = useQuery({
     queryKey: ["storyData"],
     queryFn: () => fetch(fetchUrl).then((res) => res.json()),
   });
@@ -24,7 +25,7 @@ const Stories: React.FC<StoriesProps> = (props: StoriesProps) => {
           "Content-Type": "application/json",
         },
       }).then((res) => {
-        storyData = getStoryData;
+        storiesCodes = getStoryData;
         res.json();
       }),
     onSuccess: () =>
@@ -42,12 +43,24 @@ const Stories: React.FC<StoriesProps> = (props: StoriesProps) => {
     getStoryMutation();
   }, [props.localUrl]);
 
-  if (storyData === null) return <p>No data available</p>;
-  if (storyData && storyData.error) return <p>Error: {storyData.error}</p>;
-  if (!storyData) return <p>Loading...</p>;
+  console.log("storiesCodes", storiesCodes)
+  console.log("movieTitles", movieTitles)
+
+  if (storiesCodes === null) return <p>No data available</p>;
+  if (storiesCodes && storiesCodes.error) return <p>Error: {storiesCodes.error}</p>;
+  if (!storiesCodes) return <p>Loading...</p>;
 
   return (
-    <>{storyData && storyData.length > 0 && <p>{storyData.toString()}</p>}</>
+    <>
+      {movieTitles && movieTitles.length > 0 && (
+        <p>
+          {movieTitles.map((title: any) => (
+            title
+          ))}
+        </p>
+      )}
+      <p>hi</p>
+    </>
   );
 };
 
