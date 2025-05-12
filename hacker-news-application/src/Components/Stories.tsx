@@ -43,11 +43,11 @@ const Stories: React.FC<StoriesProps> = (props: StoriesProps) => {
   }, [props.localUrl]);
 
   
-
+  console.log("storyData", storyData)
 
   if (storyData === null) return <p>No data available</p>;
-  if (storyData && !Array.isArray(storyData)) return <p>Loading...</p>;
-  if (storyData && storyData.error) return <p>{storyData.error}</p>;
+  if (storyData && storyData.error) return <p>Error: {storyData.error}</p>;
+  if (!storyData) return <p>Loading...</p>;
 
   return (
     <>
