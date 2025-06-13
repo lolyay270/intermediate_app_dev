@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useQueries, useMutation, UseQueryOptions } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { queryClient } from "../main";
 
@@ -14,12 +14,15 @@ const Stories: React.FC<StoriesProps> = (props: StoriesProps) => {
   const storyInfoUrlExtension = "/item/";   // full url is .../v0/item/[code].json
   const [fetchUrl, setFetchUrl] = useState<string>("");
   const [fetchAllArray, setFetchAllArray] = useState<Promise<Response>[]>([]);
-  const [allStoryInfo, setAllStoryInfo] = useState<StoryProps[]>([]);
+  const [allStoryInfo, setAllStoryInfo] = useState<any[]>([]);
 
 
+
+
+  
   //get the codes for all stories
   let { data: storiesIds } = useQuery({
-    queryKey: ["storyData"],
+    queryKey: ["storyIds"],
     queryFn: () => fetch(fetchUrl).then((res) => res.json()),
   });
 
@@ -36,89 +39,106 @@ const Stories: React.FC<StoriesProps> = (props: StoriesProps) => {
       }),
     onSuccess: () =>
       queryClient.invalidateQueries({
-        queryKey: ["storyData"],
+        queryKey: ["storyIds"],
       }),
   });
 
-
   //get the data for each story
-  const { mutate: getStoryInfoMutation, data: getStoryInfoData } = useMutation({
+  const { mutate: getStoryInfoMutation, data: getStoryInfoData, status: getStoryInfoStatus, error: getStoryInfoError} = useMutation({
     mutationFn: () => 
-      fetchAllStoryData().then((resArray: Response[]) => {
-        console.log("getStoryData", getStoryInfoData);
-        if (getStoryInfoData)
-        {
-          let data: any = getStoryInfoData; //stop getting typescript error by assigning to any type
-          let newStory: StoryProps; 
-          data.map((story: any) => {
-            try{
-              newStory = {
-                by: story.by,
-                descendants: story.descendants,
-                id: story.id,
-                kids: story.kids,
-                score: story.score,
-                time: story.time,
-                title: story.title,
-                type: story.type,
-                url: story.url,
-              }
-              setAllStoryInfo(allStoryInfo.concat([newStory]))
-            }
-            catch (error)
-            {
-              console.log(error);
-            }
-          })
-        }
-        resArray.map((res) => {
-          console.log("res", res)
-          res.json();
+      Promise.all(fetchAllArray).then((resArray) => {
+        let storyDatas: any[] = [];
+        
+        resArray.map(async(res) => {
+          const story: any = await res.json();
+          storyDatas.push(story)
+
+          // try{
+          //   const newStory: StoryProps = {
+          //     by: story.by,
+          //     descendants: story.descendants,
+          //     id: story.id,
+          //     kids: story.kids,
+          //     score: story.score,
+          //     time: story.time,
+          //     title: story.title,
+          //     type: story.type,
+          //     url: story.url,
+          //   }
+          //   // console.log("new story", newStory)
+          //   storyDatas = [...storyDatas, newStory]
+          // }
+          // catch (error)
+          // {
+          //   console.log("fetching story data error", error);
+          // }
+
         });
-      })
+        return storyDatas;
+      }),
+    onError: (error) => console.log(error)
   });
-  
+
   const fetchAllStoryData = () => {
+    let localFetchAllArray: Promise<Response>[] = []
+
+    //collect all fetches into a single array
     storiesIds.map((id: string) => {
-      let newFetch = fetch(fetchUrlBase + storyInfoUrlExtension + id + ".json", {
+      const newFetch = fetch(fetchUrlBase + storyInfoUrlExtension + id + ".json", {
         method: "GET",
         headers: { "Content-Type": "application/json", },
       })
-      setFetchAllArray(fetchAllArray.concat([newFetch]));
+      localFetchAllArray = [...localFetchAllArray, newFetch]
     })
-    return Promise.all(fetchAllArray)
+    setFetchAllArray(localFetchAllArray)
   };
-  
-  //whenever the path changes, refetch the data
+
+
+
+
+
+  //-----------whenever the path changes, refetch the data-----------\\
   useEffect(() => {
     navItems.forEach((nav) => {
       if (nav.localUrl == props.localUrl)
         setFetchUrl(fetchUrlBase + nav.fetchUrl);
     });
     getStoriesIdsMutation();
-    getStoryInfoMutation();
-    console.log("getStoryData", getStoryInfoData);
   }, [props.localUrl]);
 
+  useEffect(() => {
+    if (storiesIds) {
+      fetchAllStoryData();
+    } 
+  }, [storiesIds])
 
-  console.log("storiesids", storiesIds)
+  useEffect(() => {
+    const data = getStoryInfoMutation();
+    if (data !== undefined && data !== null) setAllStoryInfo(data);
+  }, [fetchAllArray])
+
+  useEffect(() => {
+    console.log("storyData", getStoryInfoData)
+    console.log("length", allStoryInfo.length)
+  }, [getStoryInfoData])
+
+
+
+
 
   if (storiesIds === null) return <p>No data available</p>;
   if (storiesIds && storiesIds.error) return <p>Error: {storiesIds.error}</p>;
-  if (!storiesIds) return <p>Loading...</p>;
+  if (getStoryInfoStatus === "error") return <p>Error: {getStoryInfoError.name + " " + getStoryInfoError.message}</p>
+  if (!storiesIds || getStoryInfoStatus !== "success") return <p>Loading...</p>;
 
-  console.log("getStoryInfoData", getStoryInfoData)
   return (
     <>
       {allStoryInfo && allStoryInfo.length > 0 && (
-        <p>
-          {allStoryInfo.map((id: any) => (
-            // <Story  id={Number(id)}/>
-            <p>{id}</p>
-          ))}
-        </p>
-      )}
-      <p>hi</p>
+        allStoryInfo.map((story: any) => (
+          // <Story  id={Number(id)}/>
+          <p>hi {story.id}</p>
+        )))
+      }
     </>
   );
 };
