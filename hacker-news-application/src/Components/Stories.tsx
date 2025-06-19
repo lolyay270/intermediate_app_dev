@@ -11,7 +11,7 @@ interface StoriesProps {
 
 const Stories: React.FC<StoriesProps> = (props: StoriesProps) => {
   const fetchUrlBase = "https://hacker-news.firebaseio.com/v0";
-  const storyInfoUrlExtension = "/item/";   // full url is .../v0/item/[code].json
+  const storyInfoUrlExtension = "/item/";   // full url is .../v0/item/[id].json
   let fetchUrl: string = "";
 
   //set the fetch url based on the page were loading
@@ -48,8 +48,7 @@ const Stories: React.FC<StoriesProps> = (props: StoriesProps) => {
 
 
 
-  if (storiesIds === null) return <p>No data available</p>;
-  if (storiesIds && storiesIds.error) return <p>Error: {storiesIds.error}</p>;
+  if (storiesIds === null || allStoryInfo === null) return <p>No data available</p>;
   if (isErrorIds || isErrorStories) return <p>Error: data cannot be shown</p>
   if (isLoadingIds || isLoadingStories) return <p>Loading...</p>;
 
@@ -57,17 +56,23 @@ const Stories: React.FC<StoriesProps> = (props: StoriesProps) => {
     <>
       {allStoryInfo && allStoryInfo.length > 0 && (
         allStoryInfo.map((story: any) => (
-          <Story
-            by={story.by}
-            descendants={story.descendants}
-            id={story.id}
-            kids={story.kids}
-            score={story.score}
-            time={story.time}
-            title={story.title}
-            type={story.type}
-            url={story.url}
-          />
+          <button>
+            <a href={"story/" + story.id}>
+              <p>{story.title}</p>
+              <p>By: {story.by}</p>
+            </a>
+          </button>
+          // <Story
+          //   by={story.by}
+          //   descendants={story.descendants}
+          //   id={story.id}
+          //   kids={story.kids}
+          //   score={story.score}
+          //   time={story.time}
+          //   title={story.title}
+          //   type={story.type}
+          //   url={story.url}
+          // />
         )))
       }
     </>
