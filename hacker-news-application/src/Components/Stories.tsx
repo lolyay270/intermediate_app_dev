@@ -39,7 +39,7 @@ const Stories: React.FC<StoriesProps> = (props: StoriesProps) => {
  } = useQuery({
    queryKey: ["storyData", storiesIds],
    queryFn: async () => {
-     const fetchAllArray = storiesIds.slice(0, 10).map((id: number) =>
+     const fetchAllArray = storiesIds.slice(0, 25).map((id: number) =>
        fetch(fetchUrlBase + storyInfoUrlExtension + id + ".json").then((res) => res.json())
      );
      return Promise.all(fetchAllArray);
