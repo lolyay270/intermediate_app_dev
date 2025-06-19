@@ -30,6 +30,7 @@ createRoot(document.getElementById("root")!).render(
             <Route path="/show" />
             <Route path="/top" />
             <Route path="/leaders" />
+            <Route path="/story/:id" />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -1,3 +1,7 @@
+interface StoryId {
+  id: number;
+}
+
 export interface StoryProps {
   by: string;
   descendants: number;
@@ -10,10 +14,13 @@ export interface StoryProps {
   url: string;
 }
 
-const Story: React.FC<StoryProps> = (props: StoryProps) => {
+const Story: React.FC<StoryId> = (props: StoryId) => {
+
   return (
     <>
-      <p>{props.by}</p>
+      {props.id}
+
+      {/* <p>{props.by}</p>
       <p>{props.descendants}</p>
       <p>{props.id}</p>
       <p>{props.kids}</p>
@@ -21,7 +28,7 @@ const Story: React.FC<StoryProps> = (props: StoryProps) => {
       <p>{props.time}</p>
       <p>{props.title}</p>
       <p>{props.type}</p>
-      <p>{props.url}</p>
+      <p>{props.url}</p> */}
     </>
   );
 }
