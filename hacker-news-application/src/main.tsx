@@ -6,6 +6,7 @@ import "./index.css";
 
 import App from "./App.tsx";
 import Nav from "./Components/Nav.tsx";
+import NotFound from "./Components/NotFound.tsx";
 
 export const queryClient = new QueryClient();
 
@@ -14,6 +15,12 @@ createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
+          <Route path="*" element={
+            <>
+              <Nav />
+              <NotFound />
+            </>
+          } />
           <Route
             path="/"
             element={
