@@ -20,9 +20,9 @@ const App = () => {
         <Leaders />
       ) : (
         isShowingStory ? (
-          <Story id={Number(storyId)}/>
+          <Story />
         ) : (
-          <Stories localUrl={currentRoute.pathname} />
+          <Stories />
         )
       )}
     </>
