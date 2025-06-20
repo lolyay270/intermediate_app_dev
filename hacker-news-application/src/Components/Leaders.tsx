@@ -12,6 +12,8 @@ import {
 } from "./ui/card"
 
 import { fetchUrlBase, storyInfoUrlExtension } from "./Stories";
+import { Button } from "./ui/button.tsx";
+import { Input } from "./ui/input.tsx";
 
 const leadersList = [
   "tptacek",
@@ -97,7 +99,11 @@ const Leaders: React.FC = () => {
 
   return (
     <>
+      <br/>
+      <br/>
+      <br/>
       <p>Search for a username within the top users</p>
+      <br/>
       <form onSubmit={leadersForm.handleSubmit(handleLeadersSubmit)}>
 
         {/* allow for predetermined list of leaders to select from */}
@@ -107,10 +113,11 @@ const Leaders: React.FC = () => {
           ))}
         </datalist>
 
-        <label htmlFor="name">Username</label>
-        <input type="text" id="name" list="leadersList" {...leadersForm.register("name")} />
-
-        <button type="submit">Search</button>
+        <label htmlFor="name">Username:</label>
+        <Input type="text" id="name" list="leadersList" {...leadersForm.register("name")} />
+        
+        <br/>
+        <Button type="submit" className="bg-blue-400">Search</Button>
       </form>
 
       <br />
@@ -134,7 +141,7 @@ const Leaders: React.FC = () => {
             ) : (
 
               userData && user && (
-                <Card>
+                <Card className="bg-blue-200">
                   <CardHeader>
                     <CardTitle>{user.id}</CardTitle>
                     <CardDescription>{user.about}</CardDescription>
@@ -142,7 +149,7 @@ const Leaders: React.FC = () => {
                   <CardContent>
                     <p>Karma: {user.karma}</p>
                     <p>
-                      Subitted: {user.submitted.length > 1 ? (
+                      Submitted: {user.submitted.length > 1 ? (
                         user.submitted.map((post) => (
                           <>
                             <br />
