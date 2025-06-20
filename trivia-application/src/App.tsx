@@ -1,25 +1,18 @@
-import { useQuery } from "@tanstack/react-query";
+import Categories from "./components/categories";
 
 const App = () => {
-  let {
-    isLoading: isLoadingCategory,
-    isError: isErrorCategory,
-    data: categoryData,
-  } = useQuery({
-    queryKey: ["categoryData"],
-    queryFn: () =>
-      fetch("https://opentdb.com/api_category.php").then((res) => res.json()),
-  });
-  categoryData = categoryData.trivia_categories;
+  const categories = Categories();
 
-  if (isLoadingCategory) return <p>Loading...</p>
-  if (isErrorCategory) return <p>Error: Cannot load data</p>
+  if (categories === "loading" /* add other loading states here */) return <p>Loading...</p>
+  if (categories === "error" /* add other error states here */) return <p>Error: Cannot load data</p>
 
   return (
     <>
-      {categoryData && (categoryData.map((cat: any) => (
-        <p>{cat.id}:  {cat.name}</p>
-      )))}
+      {categories && typeof categories === "object" && categories.length > 0 && (
+        categories.map((cat: any) => (
+          <p key={cat.id}>{cat.id}:  {cat.name}</p>
+        )))
+      }
     </>
   )
 }
