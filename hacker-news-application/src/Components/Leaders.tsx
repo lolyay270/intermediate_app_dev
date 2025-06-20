@@ -14,7 +14,6 @@ import {
 import { fetchUrlBase, storyInfoUrlExtension } from "./Stories";
 import { Button } from "./ui/button.tsx";
 import { Input } from "./ui/input.tsx";
-import { error } from "console";
 
 const leadersList = [
   "tptacek",
