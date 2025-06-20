@@ -1,3 +1,18 @@
+import { NavLink } from "react-router";
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+} from "./ui/navigation-menu"
+import { Button } from "./ui/button";
+
+export interface NavItems {
+  name: string;
+  localUrl: string;
+  fetchUrl: string;
+}
+
 export const navItems: NavItems[] = [
   {
     name: "Ask Stories",
@@ -32,25 +47,29 @@ export const navItems: NavItems[] = [
   {
     name: "Leaders",
     localUrl: "/leaders",
-    fetchUrl: "<link to my data on top leaders>",
+    fetchUrl: "", //value is unneeded since there is no fetch
   },
 ];
 
-export interface NavItems {
-  name: string;
-  localUrl: string;
-  fetchUrl: string;
-}
-
 const Nav: React.FC = () => {
   return (
-    <nav>
-      {navItems.map((item: NavItems) => (
-        <a key={item.name} href={item.localUrl}>
-          {item.name}
-        </a>
-      ))}
-    </nav>
+    <NavigationMenu>
+      <NavigationMenuList>
+
+        {navItems.map((item: NavItems) => (
+          <NavigationMenuItem key={item.name}>
+            <NavigationMenuLink>
+              <Button className="bg-sky-500/50">
+                <NavLink to={item.localUrl}>
+                  {item.name}
+                </NavLink>
+              </Button>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+        ))}
+
+      </NavigationMenuList>
+    </NavigationMenu>
   );
 };
 
