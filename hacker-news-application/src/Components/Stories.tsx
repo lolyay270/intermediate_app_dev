@@ -1,6 +1,14 @@
 import { Link, useLocation } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { navItems } from "./Nav";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card"
 
 export const fetchUrlBase = "https://hacker-news.firebaseio.com/v0";
 export const storyInfoUrlExtension = "/item/";   // full url is .../v0/item/[id].json
@@ -47,29 +55,21 @@ const Stories: React.FC = () => {
   if (isLoadingIds || isLoadingStories) return <p>Loading...</p>;
 
   return (
-    <>
+    <div className="grid grid-cols-5 gap-4">
       {allStoryInfo && allStoryInfo.length > 0 && (
         allStoryInfo.map((story: any) => (
-          <button key={story.id}>
-            <Link to={"story/" + story.id}>
-              <p>{story.title}</p>
-              <p>By: {story.by}</p>
-            </Link>
-          </button>
-          // <Story
-          //   by={story.by}
-          //   descendants={story.descendants}
-          //   id={story.id}
-          //   kids={story.kids}
-          //   score={story.score}
-          //   time={story.time}
-          //   title={story.title}
-          //   type={story.type}
-          //   url={story.url}
-          // />
+          <Card key={story.id}>
+            <CardHeader>
+              <CardTitle>{story.title}</CardTitle>
+              <CardDescription>By: {story.by}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <CardAction><Link to={"story/" + story.id}>Open Story</Link></CardAction>
+            </CardContent>
+          </Card>
         )))
       }
-    </>
+    </div>
   );
 };
 
