@@ -14,6 +14,7 @@ import {
 import { fetchUrlBase, storyInfoUrlExtension } from "./Stories";
 import { Button } from "./ui/button.tsx";
 import { Input } from "./ui/input.tsx";
+import { error } from "console";
 
 const leadersList = [
   "tptacek",
@@ -73,6 +74,9 @@ const Leaders: React.FC = () => {
         queryClient.invalidateQueries({
           queryKey: ["userData"],
         }),
+      onError: (error) => {
+        console.log("Error fetching data", {errorCode: {error}, data: getUserData})
+      }
     });
 
   useEffect(() => {
