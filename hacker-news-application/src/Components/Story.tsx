@@ -15,11 +15,23 @@ export interface StoryProps {
   url: string;
 }
 
+export const emptyStory = {
+  by: "",
+  descendants: 0,
+  id: 0,
+  kids: [],
+  score: 0,
+  time: new Date(),
+  title: "",
+  type: "",
+  url: "",
+}
+
 
 const Story: React.FC = () => {
   const storyId: number = Number(useParams().id);
   const fetchUrl = fetchUrlBase + storyInfoUrlExtension + storyId + ".json";
-  let story: StoryProps;
+  let story: StoryProps = emptyStory;
 
   // Get story data
   const {
@@ -53,7 +65,7 @@ const Story: React.FC = () => {
 
   return (
     <>
-      {story && (
+      {story !== undefined && (
         <>
           <p>By: {story.by}</p>
           <p>Descendant{story.descendants > 1 ? "s" : ""}: {story.descendants}</p>

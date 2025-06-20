@@ -12,7 +12,7 @@ import {
 import { Button } from "./ui/button";
 import { useState } from "react";
 
-import { StoryProps } from "./Story";
+import { StoryProps, emptyStory } from "./Story";
 
 export const fetchUrlBase = "https://hacker-news.firebaseio.com/v0";
 export const storyInfoUrlExtension = "/item/";   // full url is .../v0/item/[id].json
@@ -58,17 +58,7 @@ const Stories: React.FC = () => {
   const checkStoryData = () => {
     if (allStoryInfo) {
       for (let i = 0; i < allStoryInfo.length; i++) {
-        let story: StoryProps = { //make essetially an empty object to add correct values to
-          by: "",
-          descendants: 0,
-          id: 0,
-          kids: [],
-          score: 0,
-          time: new Date(),
-          title: "",
-          type: "",
-          url: "",
-        };
+        let story: StoryProps = emptyStory; //make variable defined to add correct values into
 
         if (allStoryInfo[i].by && typeof allStoryInfo[i].by === "string") story.by = allStoryInfo[i].by;
         else continue;
