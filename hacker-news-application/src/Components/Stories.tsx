@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card"
+import { Button } from "./ui/button";
 
 export const fetchUrlBase = "https://hacker-news.firebaseio.com/v0";
 export const storyInfoUrlExtension = "/item/";   // full url is .../v0/item/[id].json
@@ -58,13 +59,19 @@ const Stories: React.FC = () => {
     <div className="grid grid-cols-5 gap-4">
       {allStoryInfo && allStoryInfo.length > 0 && (
         allStoryInfo.map((story: any) => (
-          <Card key={story.id}>
+          <Card key={story.id} className="bg-blue-200">
             <CardHeader>
               <CardTitle>{story.title}</CardTitle>
               <CardDescription>By: {story.by}</CardDescription>
             </CardHeader>
             <CardContent>
-              <CardAction><Link to={"story/" + story.id}>Open Story</Link></CardAction>
+              <CardAction>
+                <Button className="bg-blue-400">
+                  <Link to={"story/" + story.id}>
+                    Open Story
+                  </Link>
+                </Button>
+              </CardAction>
             </CardContent>
           </Card>
         )))
