@@ -2,6 +2,14 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { queryClient } from "../main.tsx";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "./ui/card"
 
 import { fetchUrlBase, storyInfoUrlExtension } from "./Stories";
 
@@ -126,24 +134,30 @@ const Leaders: React.FC = () => {
             ) : (
 
               userData && user && (
-                <>
-                  <p>About: {user.about}</p>
-                  <p>Created: {user.created.toString()}</p>
-                  <p>Id: {user.id}</p>
-                  <p>Karma: {user.karma}</p>
-                  <p>
-                    Subitted: {user.submitted.length > 1 ? (
-                      user.submitted.map((post) => (
-                        <>
-                          <br />
-                          <a href={post} target="_blank">{post}</a>
-                        </>
-                      ))
-                    ) : (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>{user.id}</CardTitle>
+                    <CardDescription>{user.about}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p>Karma: {user.karma}</p>
+                    <p>
+                      Subitted: {user.submitted.length > 1 ? (
+                        user.submitted.map((post) => (
+                          <>
+                            <br />
+                            <a href={post} target="_blank">{post}</a>
+                          </>
+                        ))
+                      ) : (
                         "N/A"
-                    )}
-                  </p>
-                </>
+                      )}
+                    </p>
+                  </CardContent>
+                  <CardFooter>
+                      <p>Created: {user.created.toString()}</p>
+                  </CardFooter>
+                </Card>
               )
             )
           )
