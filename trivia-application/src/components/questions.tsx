@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryClient } from "../main";
 import { useEffect, useState } from "react";
 import type React from "react";
+import { useForm } from "react-hook-form";
 
 export interface Props {
   fetchUrl: string;
@@ -19,20 +20,24 @@ interface Question {
 
 const Questions: React.FC<Props> = (props: Props) => {
   const [questions, setQuestions] = useState<Question[]>([]);
+  const questionSubmissionForm = useForm();
+
+  const HandleQuestionsSubmit = (values: any) => {
+    console.log(values);
+  }
 
   const {
     isLoading: isLoadingQuiz,
     isError: isErrorQuiz,
     data: quizData,
     isFetching: isFetchingQuiz,
-    status: fetchStatus,
   } = useQuery({
     queryKey: ["quizData"],
     queryFn: () =>
       fetch(props.fetchUrl).then((res) => res.json()),
   });
 
-  const { mutate: getQuizMutation, data: getQuizData, isPending: isGetQuizPending, status } =
+  const { mutate: getQuizMutation, data: getQuizData, isPending: isGetQuizPending } =
     useMutation({
       mutationFn: () =>
         fetch(props.fetchUrl).then((res) => res.json()),
@@ -46,8 +51,8 @@ const Questions: React.FC<Props> = (props: Props) => {
     });
 
   useEffect(() => {
-    if (props.fetchUrl !== "" && !isGetQuizPending && fetchStatus !== "pending") { //only fetch once cause rate limiter
-      getQuizMutation();      
+    if (props.fetchUrl !== "" && !isGetQuizPending && !isFetchingQuiz) { //only fetch once cause rate limiter
+      getQuizMutation();
     }
   }, [props.fetchUrl])
 
@@ -66,13 +71,13 @@ const Questions: React.FC<Props> = (props: Props) => {
   https://stackoverflow.com/q/2450954 was in the top results */
   function shuffleArray(array: any[]) {
     for (var i = array.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
+      var j = Math.floor(Math.random() * (i + 1));
+      var temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
     }
     return array;
-}
+  }
 
   //data validation, fix questions including "&quot;" etc
   useEffect(() => {
@@ -102,30 +107,43 @@ const Questions: React.FC<Props> = (props: Props) => {
       isErrorQuiz || quizData.response_code !== 0 ? (   // res code 0 => success
         <p>Error: Connot load quiz questions</p>
       ) : (
-        questions && questions.map((question: any) => (
-          <>
-            <p>Category: {question.category}</p>
-            <p>Difficulty: {question.difficulty}</p>
-            <p>Question: {question.question}</p>
 
-            {question.type === "multiple" && (
-              <>
-                {question.all_answers.map((answer: string) => (
-                  <p>{answer}</p>
-                ))}
-              </>
-            )}
+        <form onSubmit={questionSubmissionForm.handleSubmit(HandleQuestionsSubmit)}>
+          {questions && questions.map((question: any) => (
+            <>
+              <p>Category: {question.category}</p>
+              <p>Difficulty: {question.difficulty}</p>
+              <p>Question: {question.question}</p>
 
-            {question.type === "boolean" && (
-              <>
-                <p>True</p>
-                <p>False</p>
-              </>
-            )}
-            <br />
-            <br />
-          </>
-        ))
+              {question.type === "multiple" && (
+                <>
+                  {question.all_answers.map((answer: string) => (
+                    <>
+                      <input type="radio" id={answer} value={answer} {...questionSubmissionForm.register(question.question)} />
+                      <label htmlFor={answer}>{answer}</label>
+                      <br />
+                    </>
+                  ))}
+                </>
+              )}
+
+              {question.type === "boolean" && (
+                <>
+                  <input type="radio" id="True" value="True" {...questionSubmissionForm.register(question.question)} />
+                  <label htmlFor="True">True</label>
+                  <br />
+
+                  <input type="radio" id="False" value="False" {...questionSubmissionForm.register(question.question)} />
+                  <label htmlFor="False">False</label>
+                  <br />
+                </>
+              )}
+              <br />
+              <br />
+            </>
+          ))}
+          <button type="submit">Submit Answers For Marking</button>
+        </form>
       )
     )
   )
