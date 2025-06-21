@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 
 import Categories from "./components/categories";
+import Questions from "./components/questions";
 
 interface QuizSelection {
   username: string;   //not required for opentdb but good place to save
@@ -43,16 +43,6 @@ const App = () => {
     setQuizSelection(quizSel);
   }
 
-  const {
-    isLoading: isLoadingQuiz,
-    isError: isErrorQuiz,
-    data: quizData,
-  } = useQuery({
-    queryKey: ["quizData"],
-    queryFn: () =>
-      fetch(fetchUrl).then((res) => res.json()),
-  });
-
   //update fetch Url when selection is made
   useEffect(() => {
     if (quizSelection) {
@@ -71,8 +61,6 @@ const App = () => {
       setFetchUrl(newUrl);
     }
   }, [quizSelection]);
-
-  console.log("quizData", quizData);
 
   if (!categories || categories === "loading" /* add other loading states here */) return <p>Loading...</p>
   if (categories === "error" /* add other error states here */) return <p>Error: Cannot load data</p>
@@ -123,44 +111,7 @@ const App = () => {
       </form>
 
       {quizSelectionForm.formState.isSubmitted && (
-
-        isLoadingQuiz ? (
-          <p>Quiz questions loading...</p>
-        ) : (
-
-          isErrorQuiz || quizData.response_code !== 0 ? (   // res code 0 => success
-            <p>Error: Connot load quiz questions</p>
-          ) : (
-            quizData.results.map((question: any) => (
-              <>
-                <p>Category: {question.category}</p>
-                <p>Difficulty: {question.difficulty}</p>
-                <p>Question: {question.question}</p>
-
-                {question.type === "multiple" && (
-                  <>
-                    <p>{question.correct_answer}</p>
-                    <p>
-                      {question.incorrect_answers.map((answer: string) => (
-                        answer + " "
-                      ))
-                      }
-                    </p>
-                  </>
-                )}
-
-                {question.type === "boolean" && (
-                  <>
-                    <p>True</p>
-                    <p>False</p>
-                  </>
-                )}
-                <br/>
-                <br/>
-              </>
-            ))
-          )
-        )
+        <Questions fetchUrl={fetchUrl}/>
       )}
     </>
   )
