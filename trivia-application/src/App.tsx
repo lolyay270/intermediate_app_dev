@@ -67,7 +67,9 @@ const App = () => {
 
   return (
     <>
-      <h2>Please create the quiz you would like to take</h2>
+      {!quizSelectionForm.formState.isSubmitted ? (
+        <>
+        <h2>Please create the quiz you would like to take</h2>
 
       <form onSubmit={quizSelectionForm.handleSubmit(quizSelectionSubmit)}>
         <label htmlFor="username">Your username (to save to the leaderboard):</label>
@@ -109,10 +111,14 @@ const App = () => {
 
         <button type="submit">Generate Quiz</button>
       </form>
+      </>
+      ) : (
 
-      {quizSelectionForm.formState.isSubmitted && (
+
+        //quiz selection form submitted
         <Questions fetchUrl={fetchUrl}/>
       )}
+      
     </>
   )
 }

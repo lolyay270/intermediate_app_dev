@@ -8,7 +8,7 @@ export interface Props {
   fetchUrl: string;
 }
 
-interface Question {
+export interface Question {
   category: string;
   difficulty: string;
   type: string;
@@ -20,10 +20,35 @@ interface Question {
 
 const Questions: React.FC<Props> = (props: Props) => {
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [answers, setAnswers] = useState<any>();
+
   const questionSubmissionForm = useForm();
 
+  //data validation (any question that includes a "." will be turned into an object)
+  /*values {
+    question: answer,
+    ...
+    questionPart1: {questionPart2: answer}
+    }
+    */
   const HandleQuestionsSubmit = (values: any) => {
-    console.log(values);
+    let newValues: any = {};
+    for (let [key, value] of Object.entries<any>(values)) {
+      if (!value) value = "";
+      if (typeof value === "object") {
+        const [subKey, answer] = Object.entries(value);
+        key = key + "." + subKey;
+        value = answer ? answer : "";
+
+      }
+
+      Object.defineProperty(newValues, key, {
+        value,
+      });
+    }
+
+    console.log(newValues)
+    setAnswers(newValues)
   }
 
   const {
@@ -100,51 +125,58 @@ const Questions: React.FC<Props> = (props: Props) => {
   }, [quizData])
 
   return (
-    isLoadingQuiz ? (
-      <p>Quiz questions loading...</p>
-    ) : (
+    !answers ? (
 
-      isErrorQuiz || quizData.response_code !== 0 ? (   // res code 0 => success
-        <p>Error: Connot load quiz questions</p>
+      isLoadingQuiz ? (
+        <p>Quiz questions loading...</p>
       ) : (
 
-        <form onSubmit={questionSubmissionForm.handleSubmit(HandleQuestionsSubmit)}>
-          {questions && questions.map((question: any) => (
-            <>
-              <p>Category: {question.category}</p>
-              <p>Difficulty: {question.difficulty}</p>
-              <p>Question: {question.question}</p>
+        isErrorQuiz || quizData.response_code !== 0 ? (   // res code 0 => success
+          <p>Error: Connot load quiz questions</p>
+        ) : (
 
-              {question.type === "multiple" && (
-                <>
-                  {question.all_answers.map((answer: string) => (
-                    <>
-                      <input type="radio" id={answer} value={answer} {...questionSubmissionForm.register(question.question)} />
-                      <label htmlFor={answer}>{answer}</label>
-                      <br />
-                    </>
-                  ))}
-                </>
-              )}
+          <form onSubmit={questionSubmissionForm.handleSubmit(HandleQuestionsSubmit)}>
+            {questions && questions.map((question: any) => (
+              <>
+                <p>Category: {question.category}</p>
+                <p>Difficulty: {question.difficulty}</p>
+                <p>Question: {question.question}</p>
 
-              {question.type === "boolean" && (
-                <>
-                  <input type="radio" id="True" value="True" {...questionSubmissionForm.register(question.question)} />
-                  <label htmlFor="True">True</label>
-                  <br />
+                {question.type === "multiple" && (
+                  <>
+                    {question.all_answers.map((answer: string) => (
+                      <>
+                        <input type="radio" id={answer} value={answer} {...questionSubmissionForm.register(question.question)} />
+                        <label htmlFor={answer}>{answer}</label>
+                        <br />
+                      </>
+                    ))}
+                  </>
+                )}
 
-                  <input type="radio" id="False" value="False" {...questionSubmissionForm.register(question.question)} />
-                  <label htmlFor="False">False</label>
-                  <br />
-                </>
-              )}
-              <br />
-              <br />
-            </>
-          ))}
-          <button type="submit">Submit Answers For Marking</button>
-        </form>
+                {question.type === "boolean" && (
+                  <>
+                    <input type="radio" id="True" value="True" {...questionSubmissionForm.register(question.question)} />
+                    <label htmlFor="True">True</label>
+                    <br />
+
+                    <input type="radio" id="False" value="False" {...questionSubmissionForm.register(question.question)} />
+                    <label htmlFor="False">False</label>
+                    <br />
+                  </>
+                )}
+                <br />
+                <br />
+              </>
+            ))}
+            <button type="submit">Submit Answers For Marking</button>
+          </form>
+        )
       )
+    ) : (
+
+      //answers subitted
+      <></>
     )
   )
 }
