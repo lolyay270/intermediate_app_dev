@@ -8,7 +8,7 @@ export interface Props {
   fetchUrl: string;
 }
 
-export interface Question {
+interface Question {
   category: string;
   difficulty: string;
   type: string;
@@ -18,21 +18,33 @@ export interface Question {
   all_answers: string[];    //not given by openTDB, random order of correct_answer and incorrect_answers
 }
 
+interface QuestionAnswer {
+  question: string;
+  userAnswer: string;
+  correctAnswer: string;
+  isCorrect: boolean; //easier to compare early than in the massive return method
+}
+
 const Questions: React.FC<Props> = (props: Props) => {
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [answers, setAnswers] = useState<any>();
+  const [answers, setAnswers] = useState<any[]>();
+  const [scores, setScores] = useState<QuestionAnswer[]>([]); 
 
   const questionSubmissionForm = useForm();
 
-  //data validation (any question that includes a "." will be turned into an object)
-  /*values {
-    question: answer,
+  /*data validation 
+  convert to an array of objects {question: answer}
+
+  any question that includes a "." will be turned into an object
+  
+  values {
+    question: answer, (this is normal)
     ...
-    questionPart1: {questionPart2: answer}
+    questionPart1: {questionPart2: answer} (when a "." is in the question)
     }
-    */
+  */
   const HandleQuestionsSubmit = (values: any) => {
-    let newValues: any = {};
+    let newValues: any[] = [];
     for (let [key, value] of Object.entries<any>(values)) {
       if (!value) value = "";
       if (typeof value === "object") {
@@ -42,13 +54,11 @@ const Questions: React.FC<Props> = (props: Props) => {
 
       }
 
-      Object.defineProperty(newValues, key, {
-        value,
-      });
+      newValues.push({ [key]: value });
+      //answers = [{question: answer}, ...]
     }
 
-    console.log(newValues)
-    setAnswers(newValues)
+    setAnswers(newValues);
   }
 
   const {
@@ -124,8 +134,25 @@ const Questions: React.FC<Props> = (props: Props) => {
 
   }, [quizData])
 
+
+  // Check scores for each answer
+  useEffect(() => {
+    if (answers){
+      answers.map((question, i) => {
+        const questionAnswer: QuestionAnswer = {
+          question: Object.keys(question)[0], //there will only ever be one key value pair
+          userAnswer: Object.values(question).toString(),
+          correctAnswer: questions[i].correct_answer,
+          isCorrect: Object.values(question).toString() === questions[i].correct_answer,
+        }
+        setScores((score) => [...score, questionAnswer])
+      })
+    }
+  }, [answers])
+
+
   return (
-    !answers ? (
+    !answers ? ( //Answers not submitted, show questions
 
       isLoadingQuiz ? (
         <p>Quiz questions loading...</p>
@@ -174,9 +201,24 @@ const Questions: React.FC<Props> = (props: Props) => {
         )
       )
     ) : (
-
-      //answers subitted
-      <></>
+      <>
+        {/* Answers have been submitted */}
+        
+        {scores.map((score: QuestionAnswer) => (
+          <>
+            <p>{score.question}</p>
+            <p>Your answer: {score.userAnswer}</p>
+            {score.isCorrect ? (
+              <p>CORRECT!</p>
+            ) : (
+              <p>Correct answer: {score.correctAnswer}</p>
+            )}
+            <br />
+            <br />
+          </>
+        ))}
+        
+      </>
     )
   )
 }
