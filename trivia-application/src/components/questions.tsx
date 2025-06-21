@@ -29,6 +29,7 @@ const Questions: React.FC<Props> = (props: Props) => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [answers, setAnswers] = useState<any[]>();
   const [scores, setScores] = useState<QuestionAnswer[]>([]); 
+  const [finalScore, setFinalScore] = useState<number>(0);
 
   const questionSubmissionForm = useForm();
 
@@ -146,6 +147,7 @@ const Questions: React.FC<Props> = (props: Props) => {
           isCorrect: Object.values(question).toString() === questions[i].correct_answer,
         }
         setScores((score) => [...score, questionAnswer])
+        if (questionAnswer.isCorrect) setFinalScore(finalScore + 1);
       })
     }
   }, [answers])
@@ -203,6 +205,8 @@ const Questions: React.FC<Props> = (props: Props) => {
     ) : (
       <>
         {/* Answers have been submitted */}
+
+        <h2>Final score: {finalScore}</h2>
         
         {scores.map((score: QuestionAnswer) => (
           <>
